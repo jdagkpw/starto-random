@@ -1,36 +1,632 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>STARTO Wikipedia Random</title>
-</head>
-<body>
-<script>
-const MEMBERS = ["木村拓哉", "堂本光一", "櫻井翔", "相葉雅紀", "横山裕", "内海光司", "佐藤アツヒロ", "上田竜也", "中丸雄一", "長谷川純", "中島裕翔", "岡本圭人", "中島健人", "河合郁人", "重岡大毅", "桐山照史", "中間淳太", "神山智洋", "藤井流星", "濵田崇裕", "小瀧望", "草間リチャード敬太", "林翔太", "室龍太", "高田翔", "今江大地", "松本幸大", "冨岡健翔", "野澤祐樹", "坂本昌行", "長野博", "井ノ原快彦", "小山慶一郎", "加藤シゲアキ", "増田貴久", "村上信五", "丸山隆平", "安田章大", "大倉忠義", "薮宏太", "八乙女光", "有岡大貴", "伊野尾慧", "知念侑李", "山田涼介", "髙木雄也", "横尾渉", "宮田俊哉", "二階堂高嗣", "千賀健永", "藤ヶ谷太輔", "玉森裕太", "菊池風磨", "佐藤勝利", "松島聡", "寺西拓人", "原嘉孝", "篠塚大輝", "橋本将生", "五関晃一", "戸塚祥太", "塚田僚一", "橋本良亮", "ジェシー(アイドル)", "京本大我", "松村北斗", "髙地優吾", "森本慎太郎", "田中樹", "岩本照", "深澤辰哉", "ラウール(アイドル)", "渡辺翔太", "向井康二", "阿部亮平", "目黒蓮", "宮舘涼太", "佐久間大介", "藤原丈一郎", "西畑大吾", "大橋和也", "高橋恭平", "大西流星", "道枝駿佑", "長尾謙杜", "宮近海斗", "中村海人", "七五三掛龍也", "川島如恵留", "吉澤閑也", "松田元太", "松倉海斗", "正門良規", "末澤誠也", "小島健", "佐野晶哉", "永瀬廉", "髙橋海人", "辰巳雄大", "越岡裕貴", "福田悠太", "松崎祐介", "浮所飛貴", "那須雄登", "作間龍斗", "深田竜生", "佐藤龍我", "井上瑞稀", "猪狩蒼弥", "岩﨑大昇", "中村嶺亜", "佐々木大光", "今野大輝", "矢花黎", "菅田琳寧", "本髙克樹", "鈴木悠仁", "川﨑星輝", "稲葉通陽", "川﨑皇輝", "大内リオン", "真弓孟之", "浦陸斗", "伊藤篤志", "千田藍生", "池川侑希弥", "角紳太郎", "田村海琉", "織山尚大", "内村颯太", "元木湧", "安嶋秀生", "北川拓実", "松尾龍", "青木滉平", "久保廉", "長瀬結星", "阿達慶", "千井野空翔", "竹村実悟", "末永光", "宮岡大愛", "善如寺來", "羽村仁成", "松浦銀志", "平田光寛", "岸蒼太", "山岸想", "三原健豊", "嶋﨑斗亜", "大西風雅", "岡﨑彪太郎", "渡邉大我"];
-const member = MEMBERS[Math.floor(Math.random() * MEMBERS.length)];
-(async () => {
-  try {
-const api = "https://ja.wikipedia.org/w/api.php?action=query&prop=info&titles="
-  + encodeURIComponent(member) + "&format=json&origin=*";
+// STARTO Wikipedia Random Redirect
+// Deploy this file as a Cloudflare Worker. Visiting the Worker URL immediately
+// redirects to a random member's Japanese Wikipedia search page.
+const MEMBERS = [
+  {
+    "name": "木村拓哉",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "堂本光一",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "櫻井翔",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "相葉雅紀",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "横山裕",
+    "group": "SUPER EIGHT"
+  },
+  {
+    "name": "内海光司",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "佐藤アツヒロ",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "上田竜也",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "中丸雄一",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "長谷川純",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "中島裕翔",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "岡本圭人",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "中島健人",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "河合郁人",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "重岡大毅",
+    "group": "WEST."
+  },
+  {
+    "name": "桐山照史",
+    "group": "WEST."
+  },
+  {
+    "name": "中間淳太",
+    "group": "WEST."
+  },
+  {
+    "name": "神山智洋",
+    "group": "WEST."
+  },
+  {
+    "name": "藤井流星",
+    "group": "WEST."
+  },
+  {
+    "name": "濵田崇裕",
+    "group": "WEST."
+  },
+  {
+    "name": "小瀧望",
+    "group": "WEST."
+  },
+  {
+    "name": "草間リチャード敬太",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "林翔太",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "室龍太",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "高田翔",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "今江大地",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "松本幸大",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "冨岡健翔",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "野澤祐樹",
+    "group": "STARTO所属タレント"
+  },
+  {
+    "name": "坂本昌行",
+    "group": "20th Century"
+  },
+  {
+    "name": "長野博",
+    "group": "20th Century"
+  },
+  {
+    "name": "井ノ原快彦",
+    "group": "20th Century"
+  },
+  {
+    "name": "小山慶一郎",
+    "group": "NEWS"
+  },
+  {
+    "name": "加藤シゲアキ",
+    "group": "NEWS"
+  },
+  {
+    "name": "増田貴久",
+    "group": "NEWS"
+  },
+  {
+    "name": "村上信五",
+    "group": "SUPER EIGHT"
+  },
+  {
+    "name": "丸山隆平",
+    "group": "SUPER EIGHT"
+  },
+  {
+    "name": "安田章大",
+    "group": "SUPER EIGHT"
+  },
+  {
+    "name": "大倉忠義",
+    "group": "SUPER EIGHT"
+  },
+  {
+    "name": "薮宏太",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "八乙女光",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "有岡大貴",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "伊野尾慧",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "知念侑李",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "山田涼介",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "髙木雄也",
+    "group": "Hey! Say! JUMP"
+  },
+  {
+    "name": "横尾渉",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "宮田俊哉",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "二階堂高嗣",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "千賀健永",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "藤ヶ谷太輔",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "玉森裕太",
+    "group": "Kis-My-Ft2"
+  },
+  {
+    "name": "菊池風磨",
+    "group": "timelesz"
+  },
+  {
+    "name": "佐藤勝利",
+    "group": "timelesz"
+  },
+  {
+    "name": "松島聡",
+    "group": "timelesz"
+  },
+  {
+    "name": "寺西拓人",
+    "group": "timelesz"
+  },
+  {
+    "name": "原嘉孝",
+    "group": "timelesz"
+  },
+  {
+    "name": "篠塚大輝",
+    "group": "timelesz"
+  },
+  {
+    "name": "橋本将生",
+    "group": "timelesz"
+  },
+  {
+    "name": "五関晃一",
+    "group": "A.B.C-Z"
+  },
+  {
+    "name": "戸塚祥太",
+    "group": "A.B.C-Z"
+  },
+  {
+    "name": "塚田僚一",
+    "group": "A.B.C-Z"
+  },
+  {
+    "name": "橋本良亮",
+    "group": "A.B.C-Z"
+  },
+  {
+    "name": "ジェシー(アイドル)",
+    "group": "SixTONES"
+  },
+  {
+    "name": "京本大我",
+    "group": "SixTONES"
+  },
+  {
+    "name": "松村北斗",
+    "group": "SixTONES"
+  },
+  {
+    "name": "髙地優吾",
+    "group": "SixTONES"
+  },
+  {
+    "name": "森本慎太郎",
+    "group": "SixTONES"
+  },
+  {
+    "name": "田中樹",
+    "group": "SixTONES"
+  },
+  {
+    "name": "岩本照",
+    "group": "Snow Man"
+  },
+  {
+    "name": "深澤辰哉",
+    "group": "Snow Man"
+  },
+  {
+    "name": "ラウール(アイドル)",
+    "group": "Snow Man"
+  },
+  {
+    "name": "渡辺翔太",
+    "group": "Snow Man"
+  },
+  {
+    "name": "向井康二",
+    "group": "Snow Man"
+  },
+  {
+    "name": "阿部亮平",
+    "group": "Snow Man"
+  },
+  {
+    "name": "目黒蓮",
+    "group": "Snow Man"
+  },
+  {
+    "name": "宮舘涼太",
+    "group": "Snow Man"
+  },
+  {
+    "name": "佐久間大介",
+    "group": "Snow Man"
+  },
+  {
+    "name": "藤原丈一郎",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "西畑大吾",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "大橋和也",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "高橋恭平",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "大西流星",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "道枝駿佑",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "長尾謙杜",
+    "group": "なにわ男子"
+  },
+  {
+    "name": "宮近海斗",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "中村海人",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "七五三掛龍也",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "川島如恵留",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "吉澤閑也",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "松田元太",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "松倉海斗",
+    "group": "Travis Japan"
+  },
+  {
+    "name": "正門良規",
+    "group": "Aぇ! group"
+  },
+  {
+    "name": "末澤誠也",
+    "group": "Aぇ! group"
+  },
+  {
+    "name": "小島健",
+    "group": "Aぇ! group"
+  },
+  {
+    "name": "佐野晶哉",
+    "group": "Aぇ! group"
+  },
+  {
+    "name": "永瀬廉",
+    "group": "King & Prince"
+  },
+  {
+    "name": "髙橋海人",
+    "group": "King & Prince"
+  },
+  {
+    "name": "辰巳雄大",
+    "group": "ふぉ〜ゆ〜"
+  },
+  {
+    "name": "越岡裕貴",
+    "group": "ふぉ〜ゆ〜"
+  },
+  {
+    "name": "福田悠太",
+    "group": "ふぉ〜ゆ〜"
+  },
+  {
+    "name": "松崎祐介",
+    "group": "ふぉ〜ゆ〜"
+  },
+  {
+    "name": "浮所飛貴",
+    "group": "ACEes"
+  },
+  {
+    "name": "那須雄登",
+    "group": "ACEes"
+  },
+  {
+    "name": "作間龍斗",
+    "group": "ACEes"
+  },
+  {
+    "name": "深田竜生",
+    "group": "ACEes"
+  },
+  {
+    "name": "佐藤龍我",
+    "group": "ACEes"
+  },
+  {
+    "name": "井上瑞稀",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "猪狩蒼弥",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "岩﨑大昇",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "中村嶺亜",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "佐々木大光",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "今野大輝",
+    "group": "KEY TO LIT"
+  },
+  {
+    "name": "矢花黎",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "菅田琳寧",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "本髙克樹",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "鈴木悠仁",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "川﨑星輝",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "稲葉通陽",
+    "group": "B&ZAI"
+  },
+  {
+    "name": "川﨑皇輝",
+    "group": "ジュニア"
+  },
+  {
+    "name": "大内リオン",
+    "group": "AmBitious"
+  },
+  {
+    "name": "真弓孟之",
+    "group": "AmBitious"
+  },
+  {
+    "name": "浦陸斗",
+    "group": "AmBitious"
+  },
+  {
+    "name": "伊藤篤志",
+    "group": "Boys be"
+  },
+  {
+    "name": "千田藍生",
+    "group": "Boys be"
+  },
+  {
+    "name": "池川侑希弥",
+    "group": "Boys be"
+  },
+  {
+    "name": "角紳太郎",
+    "group": "Boys be"
+  },
+  {
+    "name": "田村海琉",
+    "group": "ジュニア"
+  },
+  {
+    "name": "織山尚大",
+    "group": "Howzit"
+  },
+  {
+    "name": "内村颯太",
+    "group": "ジュニア"
+  },
+  {
+    "name": "元木湧",
+    "group": "ジュニア"
+  },
+  {
+    "name": "安嶋秀生",
+    "group": "ジュニア"
+  },
+  {
+    "name": "北川拓実",
+    "group": "ジュニア"
+  },
+  {
+    "name": "松尾龍",
+    "group": "ジュニア"
+  },
+  {
+    "name": "青木滉平",
+    "group": "ジュニア"
+  },
+  {
+    "name": "久保廉",
+    "group": "ジュニア"
+  },
+  {
+    "name": "長瀬結星",
+    "group": "ジュニア"
+  },
+  {
+    "name": "阿達慶",
+    "group": "ジュニア"
+  },
+  {
+    "name": "千井野空翔",
+    "group": "ジュニア"
+  },
+  {
+    "name": "竹村実悟",
+    "group": "ジュニア"
+  },
+  {
+    "name": "末永光",
+    "group": "ジュニア"
+  },
+  {
+    "name": "宮岡大愛",
+    "group": "ジュニア"
+  },
+  {
+    "name": "善如寺來",
+    "group": "ジュニア"
+  },
+  {
+    "name": "羽村仁成",
+    "group": "ジュニア"
+  },
+  {
+    "name": "松浦銀志",
+    "group": "ジュニア"
+  },
+  {
+    "name": "平田光寛",
+    "group": "ジュニア"
+  },
+  {
+    "name": "岸蒼太",
+    "group": "ジュニア"
+  },
+  {
+    "name": "山岸想",
+    "group": "ジュニア"
+  },
+  {
+    "name": "三原健豊",
+    "group": "ジュニア"
+  },
+  {
+    "name": "嶋﨑斗亜",
+    "group": "関西ジュニア"
+  },
+  {
+    "name": "大西風雅",
+    "group": "関西ジュニア"
+  },
+  {
+    "name": "岡﨑彪太郎",
+    "group": "関西ジュニア"
+  },
+  {
+    "name": "渡邉大我",
+    "group": "関西ジュニア"
 
-const response = await fetch(api);
-const data = await response.json();
-const pages = data.query.pages;
-const page = Object.values(pages)[0];
-
-if (page && !page.missing) {
-  location.replace("https://ja.wikipedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g, "_")));
-} else {
-  location.replace("https://ja.wikipedia.org/w/index.php?search=" + encodeURIComponent(member));
-}
-    } else {
-      location.replace("https://ja.wikipedia.org/w/index.php?search=" + encodeURIComponent(member));
-    }
-  } catch (e) {
-    location.replace("https://ja.wikipedia.org/w/index.php?search=" + encodeURIComponent(member));
   }
-})();
-</script>
-</body>
-</html>
+];
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    if (url.pathname === "/members") {
+      return new Response(JSON.stringify(MEMBERS, null, 2), {
+        headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
+      });
+    }
+    const member = MEMBERS[Math.floor(Math.random() * MEMBERS.length)];
+    const target = "https://ja.wikipedia.org/wiki/Special:Search?search=" + encodeURIComponent(member.name);
+    return Response.redirect(target, 302);
+  }
+};
