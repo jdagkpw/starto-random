@@ -11,15 +11,19 @@ const MEMBERS = ["木村拓哉", "堂本光一", "櫻井翔", "相葉雅紀", "�
 const member = MEMBERS[Math.floor(Math.random() * MEMBERS.length)];
 (async () => {
   try {
-    const api = "https://ja.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srsearch=" 
-      + encodeURIComponent(member);
+const api = "https://ja.wikipedia.org/w/api.php?action=query&prop=info&titles="
+  + encodeURIComponent(member) + "&format=json&origin=*";
 
-    const response = await fetch(api);
-    const data = await response.json();
-    const hit = data.query && data.query.search && data.query.search[0];
+const response = await fetch(api);
+const data = await response.json();
+const pages = data.query.pages;
+const page = Object.values(pages)[0];
 
-    if (hit && hit.title) {
-      location.replace("https://ja.wikipedia.org/wiki/" + encodeURIComponent(hit.title.replace(/ /g, "_")));
+if (page && !page.missing) {
+  location.replace("https://ja.wikipedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g, "_")));
+} else {
+  location.replace("https://ja.wikipedia.org/w/index.php?search=" + encodeURIComponent(member));
+}
     } else {
       location.replace("https://ja.wikipedia.org/w/index.php?search=" + encodeURIComponent(member));
     }
